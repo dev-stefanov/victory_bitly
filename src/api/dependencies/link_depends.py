@@ -15,3 +15,6 @@ def get_link_repo(session: AsyncSession = Depends(get_async_db)):
 
 def get_link_uc(repo=Depends(get_link_repo)):
     return GetLink(repo)
+
+def create_link_uc(repo=Depends(get_link_repo)):
+    return CreateLink(repo)

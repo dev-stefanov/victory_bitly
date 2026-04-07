@@ -1,19 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import RedirectResponse
 
-from src.api.dependencies.link_depends import get_link_uc
+from src.api.dependencies.link_depends import get_link_uc, create_link_uc
 from src.domain.expections.link_exeptions import LinkNotFound
+from src.api.schemas.link_schema import LinkSchema
 
 router = APIRouter()
 
-@router.post('/shorten')
-async def shorten_url():
-    return ...
-
-
-@router.get('/{short_id}')
+@router.post('/shorten', response_model=LinkSchema, status_code=status.HTTP_201_CREATED)
+async def shorten_url(url: str, uc=Depends(create_link_uc)):
+    return uc.execute(url)
+    
+ 
+@router.get('/{short_id}', response_model=LinkSchema)
 async def original_redirected(short_id: str, uc=Depends(get_link_uc)):
     try:
-        return await uc.execute(short_id)
+        link = await uc.execute(short_id)
+        return RedirectResponse(url=link.url)
     except LinkNotFound:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Link not found')
 
