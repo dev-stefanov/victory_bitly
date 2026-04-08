@@ -29,6 +29,7 @@ class UpdateLink:
     def __init__(self, link_repo: LinkRepository):
         self.link_repo = link_repo
 
-    async def execute(self) -> Link:
-        ...
+    async def execute(self, short_id: str) -> Link:
+        link = await self.link_repo.update(short_id)
+        return link
 
