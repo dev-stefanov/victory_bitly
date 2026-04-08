@@ -10,7 +10,7 @@ class SQLAlchemyLinkRepository(LinkRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
     
-    def create(self, short_id: str, url: str, count: int):
+    async def create(self, short_id: str, url: str, count: int):
         link = LinkModel(short_id=short_id, url=url, count=count)
         self.session.add(link)
         return Link(short_id, url, count)

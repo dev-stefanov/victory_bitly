@@ -8,11 +8,11 @@ class CreateLink:
     def __init__(self, link_repo: LinkRepository):
         self.link_repo = link_repo
 
-    def execute(self, url: str, count: int = 0) -> Link:
+    async def execute(self, url: str, count: int = 0) -> Link:
         code = generate_code()
-        while self.link_repo.get(code):
+        while await self.link_repo.get(code):
             code = generate_code()
-        link = self.link_repo.create(code, url, count)
+        link = await self.link_repo.create(code, url, count)
         return link
 
 
@@ -24,15 +24,16 @@ class GetLink:
         link = await self.link_repo.get(short_id)
         if not link:
             raise LinkNotFound
-        
+        link = await self.link_repo.update(short_id)
         return link
         
 
-class UpdateLink:
+class GetLinkCount:
     def __init__(self, link_repo: LinkRepository):
         self.link_repo = link_repo
 
     async def execute(self, short_id: str) -> Link:
-        link = await self.link_repo.update(short_id)
+        link = await self.link_repo.get(short_id)
+        if not link:
+            raise LinkNotFound
         return link
-
