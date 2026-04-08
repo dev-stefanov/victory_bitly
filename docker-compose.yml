@@ -17,5 +17,24 @@ services:
       retries: 5
       start_period: 30s
     restart: unless-stopped
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=db
+      - DATABASE=${DATABASE}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=5432
+    depends_on: 
+      db: 
+        condition:
+          service_healthy
+    volumes:
+      - .:/app 
+    restart: unless-stopped
+
 volumes:
   postgres_data:

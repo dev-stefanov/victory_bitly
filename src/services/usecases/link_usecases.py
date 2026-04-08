@@ -8,8 +8,11 @@ class CreateLink:
     def __init__(self, link_repo: LinkRepository):
         self.link_repo = link_repo
 
-    def execute(self, url: str, count: int = 0) -> Link: 
-        link = self.link_repo.create(generate_code(), url, count)
+    def execute(self, url: str, count: int = 0) -> Link:
+        code = generate_code()
+        while self.link_repo.get(code):
+            code = generate_code()
+        link = self.link_repo.create(code, url, count)
         return link
 
 
