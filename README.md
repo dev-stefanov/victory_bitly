@@ -28,4 +28,5 @@ cd victory_bitly
 # Запустите сервис и базу данных
 docker-compose up --build
 
-
+# Запустить тесты
+docker-compose run test

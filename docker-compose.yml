@@ -36,5 +36,13 @@ services:
       - .:/app 
     restart: unless-stopped
 
+  test:
+    build: .
+    command: pytest -v --asyncio-mode=auto
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
 volumes:
   postgres_data:

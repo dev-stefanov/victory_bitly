@@ -18,4 +18,6 @@ RUN poetry install --no-root
 
 COPY . . 
 
+# на всякий случай тесты сразу запускаются до поднятия бд и api
+
 CMD ["sh", "-c", "pytest -v && alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"]
